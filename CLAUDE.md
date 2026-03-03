@@ -118,4 +118,3 @@ git branch -D secplus
 | `sessions.md` | Session log with dates and outcomes | End of each session |
 | `concept-walkthrough.md` | Reference guide for persistent concept gaps | As needed |
 | `glossary.md` | Comprehensive reference — 47 sections, all 5 domains, with decision rules | As needed |
-| `tasks/` | Gap analysis reports, validation artifacts, builder output | During content refresh |
