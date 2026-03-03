@@ -112,8 +112,10 @@ git branch -D secplus
 | File | Purpose | Updated when |
 |------|---------|-------------|
 | `CLAUDE.md` | This file — session bootstrap, phase tracking | Phase changes |
+| `AGENTS.md` | Agent workflows for content maintenance (gap analysis, builders, validators) | When workflows change |
 | `progress.md` | Knowledge map, per-objective scores | After each domain assessment |
 | `notes.md` | Running study notes, mnemonics, corrections | After each wrong answer |
 | `sessions.md` | Session log with dates and outcomes | End of each session |
 | `concept-walkthrough.md` | Reference guide for persistent concept gaps | As needed |
-| `glossary.md` | Acronym and term reference | As needed |
+| `glossary.md` | Comprehensive reference — 47 sections, all 5 domains, with decision rules | As needed |
+| `tasks/` | Gap analysis reports, validation artifacts, builder output | During content refresh |

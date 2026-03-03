@@ -49,7 +49,8 @@ Questions match the real exam format: scenario-based stems, plausible distractor
 | `sessions.md` | Session log — date, questions asked, scores, key improvements |
 | `notes.md` | Running study notes — wrong answers, decision rules, mnemonics |
 | `concept-walkthrough.md` | Reference guide for commonly confused concepts |
-| `glossary.md` | Acronym and term definitions |
+| `glossary.md` | Comprehensive reference — 47 sections covering all 5 domains with decision rules, validated against official exam objectives |
+| `tasks/` | Gap analysis reports and validation artifacts from content review |
 
 ## Study Timeline
 
