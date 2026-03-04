@@ -1,6 +1,6 @@
 # Security+ SY0-701 Study System
 
-A structured 3-day study system for the CompTIA Security+ SY0-701 exam, designed to be used with [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+A structured study system for the CompTIA Security+ SY0-701 exam, designed to be used with [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 ## How It Works
 
