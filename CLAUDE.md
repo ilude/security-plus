@@ -2,13 +2,20 @@
 
 ## Quick Start
 
-When starting a study session, read these files in order:
-1. This file (context + instructions)
-2. `progress.md` (current knowledge map)
-3. `sessions.md` (last session recap)
-4. `notes.md` (accumulated knowledge)
+When the user starts a session (says "begin", "start", "let's go", "study", or similar):
 
-Then pick up where we left off based on current phase.
+1. Read `progress.md` — check if baseline eval exists
+2. Read `sessions.md` — check session history
+3. Read the User Knowledge Profile section below — check if populated
+
+**If User Knowledge Profile is empty (placeholders still present):**
+→ Run the **Onboarding Flow** (see below)
+
+**If profile is filled but no baseline eval in progress.md:**
+→ Skip to **Baseline Eval** (see below)
+
+**If both profile and baseline exist:**
+→ Read `notes.md`, then resume study based on Current Phase
 
 ## Exam Reference
 
@@ -28,10 +35,10 @@ Then pick up where we left off based on current phase.
 
 ## Study Timeline (3 Days)
 
-### Day 1: Assessment + Triage
-- Rapid assessment: ~3-5 questions per domain (heaviest domains first)
-- Record scores to `progress.md` immediately after each domain
-- After full assessment, drill weakest areas in heaviest domains
+### Day 1: Onboarding + Baseline + Triage
+- Auto-onboarding: profile gathered via conversation (if not already done)
+- Baseline eval: 25 mixed-domain questions to seed knowledge map
+- After baseline, drill weakest areas in heaviest domains (priority queue)
 
 ### Day 2: Targeted Drilling
 - Hammer weak/moderate areas from Day 1
@@ -47,18 +54,95 @@ Then pick up where we left off based on current phase.
 
 ## User Knowledge Profile
 
-<!-- Fill this in at the start of your study. This helps Claude calibrate question difficulty and focus areas. -->
+<!-- AUTO-POPULATED by onboarding flow. Do not edit manually. -->
 
-- **IT experience level**: (e.g., 5 years sysadmin, 10 years developer, fresh grad)
-- **Known strengths**: (e.g., networking, Linux, cloud, scripting)
-- **Known weaknesses**: (e.g., cryptography, compliance frameworks, newer cloud acronyms)
-- **Exam-specific notes**: (e.g., "I know concepts but not the acronym names", "first attempt", "retake after failing with 720")
+- **Years of IT experience**: _not yet collected_
+- **Primary role**: _not yet collected_
+- **Hands-on security experience**: _not yet collected_
+- **Prior Security+ attempts**: _not yet collected_
+- **Timeline pressure**: _not yet collected_
+- **Predicted strengths**: _not yet collected_
+- **Predicted weaknesses**: _not yet collected_
+
+## Onboarding Flow
+
+When the profile above contains "_not yet collected_" placeholders, run this flow automatically:
+
+### Step 1: Gather profile (single AskUserQuestion call, 4 questions)
+
+**Q1** — "How many years of IT experience do you have?"
+- Options: None / 1-2 / 3-5 / 6+
+
+**Q2** — "Which best describes your primary IT role?"
+- Options: Systems-Server Admin / Network Admin / Developer-Engineer / Help Desk-Support / Security (SOC, GRC, Pentesting) / Not currently in IT
+
+**Q3** — "Have you worked directly with security tools or processes on the job? (firewalls, SIEM, vulnerability scanners, incident response, compliance audits)"
+- Options: Yes / No
+
+**Q4** — "Have you studied for or attempted Security+ before?"
+- Options: First time / Studied before, didn't sit the exam / Retaking after a failed attempt
+
+Ask Q1-Q4 in a single AskUserQuestion call. Then ask Q5 separately:
+
+**Q5** — "Is there a deadline driving this?"
+- Options: Less than 2 weeks / 2-4 weeks / 1-3 months / No deadline
+
+### Step 2: Predict domain strengths from role
+
+Use this matrix to pre-seed predicted strengths/weaknesses based on the role answer:
+
+| Role | D1 (Concepts) | D2 (Threats) | D3 (Architecture) | D4 (Operations) | D5 (GRC) |
+|------|---|---|---|---|---|
+| Systems-Server Admin | Moderate | Strong | Moderate | Strong | Weak |
+| Network Admin | Moderate | Moderate | Strong | Strong | Weak |
+| Developer-Engineer | Moderate | Moderate | Weak | Weak | Weak |
+| Help Desk-Support | Weak | Weak | Weak | Moderate | Weak |
+| Security (SOC, GRC, Pentesting) | Moderate | Strong | Moderate | Strong | Moderate |
+| Not currently in IT | Weak | Weak | Weak | Weak | Weak |
+
+If Q3 (hands-on security) is "Yes", bump D2 and D4 predictions up one level.
+If Q4 is "Retaking", the user has foundational knowledge — focus baseline eval on finding the specific failure pattern rather than broad coverage.
+
+**Universal assumption**: Treat D5 (GRC) and cryptography as "assumed weak until proven otherwise" for ALL roles. GRC jumped from 14% to 20% weight in SY0-701 and is the most common blind spot across all backgrounds.
+
+### Step 3: Write profile to this file
+
+Use Edit to replace all "_not yet collected_" placeholders with actual answers and predicted strengths/weaknesses. This persists across sessions.
+
+### Step 4: Launch Baseline Eval
+
+Do not wait for another user message. Proceed directly to the baseline eval.
+
+## Baseline Eval
+
+The baseline is a rapid knowledge check across ALL 5 domains, used to build a starting priority map. It is NOT a final score — it seeds `progress.md` so study can be targeted from the first real session.
+
+### How it works:
+- **25 questions total**: 5 per domain, drawn from different objectives within each domain
+- **Mixed order**: Questions are interleaved across domains (not grouped). The user should not be able to predict which domain is being tested. Follow the No Priming rule.
+- **Standard quiz rules apply**: Use AskUserQuestion, 4 options, confidence check, no priming, acronym expansion in explanations only — all rules from Quiz Instructions below.
+- **After all 25 questions**:
+  1. Score each domain and each objective touched
+  2. Update `progress.md` with baseline scores and date
+  3. Compute priority queue: `priority = domain_weight × (1 - score_pct)` — highest priority = weakest area in heaviest domain
+  4. Update the Priority Queue section in `progress.md`
+  5. Update Current Phase below to reflect baseline is complete
+  6. Log the session to `sessions.md`
+  7. Tell the user their baseline results and where study will focus
+
+## Ongoing Study: Domain Mixing Rule
+
+Even after baseline, **never study a single domain in isolation**. During any study session:
+- ~60-70% of questions target the current priority areas (weak + heavy domains)
+- ~30-40% are mixed from other domains — including strong ones — to maintain breadth and prevent decay
+- Rotate which "other" domains get mixed in so all 5 get regular touches
+- If a user gets a previously-strong area wrong during mixing, flag it and bump that objective's priority
 
 ## Current Phase
 
-**Phase**: Day 1 — Not started
-**Status**: Begin with assessment
-**Next action**: Start Domain 4 assessment (highest weight)
+**Phase**: Not started — awaiting onboarding
+**Status**: Profile not yet collected
+**Next action**: Run onboarding flow when user starts a session
 
 ## Global Rule: Always Expand Acronyms
 
@@ -85,13 +169,6 @@ When quizzing the user:
     - **Do NOT use synonyms or obvious restatements of the answer** in the question stem.
     - Mix up topics so the user can't predict what's coming next. Every question should feel cold.
 12. **Teach decision rules on wrong answers** — after a miss, explain the distinguishing pattern that reliably points to the correct answer on exam day. Save these to `notes.md`.
-
-### Domain assessment order (heaviest weight first):
-1. Domain 4: Security Operations (28%)
-2. Domain 2: Threats, Vulnerabilities, and Mitigations (22%)
-3. Domain 5: Security Program Management and Oversight (20%)
-4. Domain 3: Security Architecture (18%)
-5. Domain 1: General Security Concepts (12%)
 
 ### Scoring per objective:
 - **Strong** (80%+): Consistently correct, understands nuance

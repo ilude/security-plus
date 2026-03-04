@@ -14,12 +14,13 @@ Claude Code reads the `CLAUDE.md` file in this repo as its instruction set. It a
 
 Questions match the real exam format: scenario-based stems, plausible distractors, bare acronyms. A confidence check after each answer prevents lucky guesses from masking gaps.
 
+> **Note on PBQs**: The real Security+ exam includes Performance-Based Questions — interactive simulations like configuring a firewall, matching items, or completing a network diagram. This system attempts to approximate PBQ-style thinking with scenario questions, but it is fundamentally a **multiple-choice study tool**. It cannot replicate drag-and-drop, interactive labs, or hands-on simulations. For PBQ practice, supplement with lab environments or dedicated PBQ trainers.
+
 ## Getting Started
 
 1. Clone this repo
 2. Open the directory in Claude Code (`claude` in terminal)
-3. Fill in the **User Knowledge Profile** section in `CLAUDE.md` with your background
-4. Say "Let's start studying" — Claude will begin the Day 1 assessment
+3. Say "begin" — Claude will ask about your background, then launch a 25-question baseline eval across all 5 domains
 
 ## Exam Reference
 
@@ -63,9 +64,10 @@ The system is designed for a 3-day intensive cram, but works at any pace:
 
 Edit `CLAUDE.md` to adjust:
 
-- **User Knowledge Profile** — tell Claude your background so it calibrates difficulty
 - **Study Timeline** — change the 3-day structure to fit your schedule
 - **Quiz Instructions** — tweak question format, confidence tracking, or explanation style
+
+The User Knowledge Profile is collected automatically via conversation on first launch — no file editing needed.
 
 ## License
 
